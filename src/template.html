@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ElasticSwarm</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>    
+</head>
+
+<script type="text/javascript">
+	console.log("test");
+	  setTimeout(function () { 
+	      location.reload();
+	    }, 10 * 1000);	
+</script>
+    
+<body role="document">
+<div class="container theme-showcase" role="main">
+    <div class="page-header">
+        <h2> Swarm <span class="label label-info">{{swarm_addr}}</span></h2>
+       <div class="alert alert-success" role="alert">Last update : {{update_time}}</div>
+        
+    <div class="container-fluid">
+      <div class="col-md-4">
+          <div class="well">
+              <b>Containers: </b> <span class="badge badge"> {{ swarm.status_swarm.Containers }} </span><br /> 
+              <b>Running: </b> <span class="badge badge"> {{ swarm.status_swarm.ContainersRunning }} </span><br />
+              <b>Paused: </b> <span class="badge badge"> {{ swarm.status_swarm.ContainersPaused }} </span><br /> 
+              <b>Stopped: </b> <span class="badge badge"> {{ swarm.status_swarm.ContainersStopped }} </span><br />
+          </div>
+      </div>
+      <div class="col-md-4">
+          <div class="well">
+              <b>Images: </b> <span class="badge badge"> {{ swarm.status_swarm.Images }} </span><br />
+              <b>Nodes: </b> <span class="badge badge"> {{ swarm.status_swarm.nodes }} </span><br />
+              <b>CPUs: </b> <span class="badge badge"> {{ swarm.status_swarm.NCPU }} </span><br />
+              <b>Total Memory: </b> {{ human_size(swarm.status_swarm.MemTotal) }} <br />
+          </div>
+      </div>    
+      <div class="col-md-4">
+          <div class="well">
+              <b>Server Version: </b> {{ swarm.swarm_version.Version }} <br />
+              <b>Strategy: </b> {{ swarm.status_swarm.Strategy }} <br />
+              <b>Filters: </b> {{ swarm.status_swarm.Filters }} <br />
+          </div>
+      </div>
+  </div>
+
+    <div class="page-header">
+        <h3>Nodes</h3>
+    </div>
+
+    {% for node_name, node in swarm.status_nodes.items() %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+              <h1 class="panel-title"> <span class="label label-primary">{{node_name}}</span> <span class="label label-info">{{node.url}}</span></h1>
+            </div>
+            <div class="panel-body">
+                <b>Reserved CPUs= </b> {{node.ReservedCPUs}} ,
+                <b>Reserved Memory: </b> {{node.ReservedMemory}}<br />
+                <b>Labels: </b> {{node.Labels}}<br />
+            </div>
+
+             {% if node.error %}
+              <div class="panel-body">
+              <div class="alert alert-danger" role="alert">{{ node.error }}</div>
+              </div>                
+            
+             {% else %}
+
+            <div class="panel-body">
+
+                    <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Container</th>
+                                    <th>Id</th>
+                                    <th>Status</th>
+                                    <th>Cpu</th>
+                                    <th>Memory</th>
+                                    <th>Command</th>
+                                    <th>Names</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for container_id, container in node.containers.items() %}
+                            <tr>
+                                    <td>{{container.image}}</td>
+                                    <td>{{container.short_id}}</td>
+                                    <td>
+                                    {% if container.status == 'running' %}
+                                        <span class="label label-success">running</span>
+                                    {% elif container.status == 'created' %}
+                                        <span class="label label-warning">created</span>
+                                    {% elif container.status == 'paused' %}
+                                        <span class="label label-primary">paused</span>
+                                    {% elif container.status == 'exited' %}
+                                        <span class="label label-default">exited</span>
+                                    {% elif container.status == 'restarting' %}
+                                        <span class="label label-warning">restarting</span>
+                                    {% else %}
+                                        {container.status}}
+                                    {% endif %}
+                                    </td>
+                                    {% if container.cpu_percent is none %}
+                                        <td>-</td>
+                                    {% else %}
+                                        <td>{{ "{:.0f}".format(container.cpu_percent) }}%</td>
+                                    {% endif %}
+                                    
+                                    {% if container.memory_usage is none %}
+                                        <td>-</td>
+                                    {% else %}
+                                        <td>{{human_size(container.memory_usage)}}</td>
+                                    {% endif %}                                    
+                                    <td>{{container.command}}</td>
+                                    <td>{{container.name}}</td>
+                                </tr>               
+               {% endfor %}                           
+                            </tbody>
+                        </table>
+            </div>
+             {% endif %}
+          </div>          
+    {% endfor %}
+    
+    
+    
+    <div class="page-header">
+        <h3>Images</h3>
+   {% for node_name, images in swarm.images_nodes.items() %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+              <h1 class="panel-title"> <span class="label label-primary">{{node_name}}</span> </h1>
+            </div>
+            
+             {% if images.error %}
+              <div class="panel-body">
+              <div class="alert alert-danger" role="alert">{{ images.error }}</div>
+              </div>                
+            
+             {% else %}
+
+            <div class="panel-body">
+                <b>Count: </b> {{images.count}}<br />
+                <b>Total size: </b> {{human_size(images.total_size)}}<br />
+            </div>
+            <div class="panel-body">
+                    <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Image ID</th>
+                                    <th>Labels</th>
+                                    <th>Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for image_id, image in images.images.items() %}
+                            <tr>
+                                    <td>{{image.short_id}}</td>
+                                    <td>{{image.RepoTags[0]}}</td>
+                                    <td>{{human_size(image.Size)}}</td>
+                          </tr>
+
+               {% endfor %}                           
+                            </tbody>
+                        </table>
+            </div>
+          </div>   
+          {% endif %}                        
+    {% endfor %}
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>
+
+
+

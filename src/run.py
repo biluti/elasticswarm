@@ -1,8 +1,9 @@
 #! /usr/bin/python3
 # -*- coding: UTF-8 -*-
 
-import sys
+
 import os
+import sys
 import json 
 import time
 import logging
@@ -10,8 +11,12 @@ import argparse
 from datetime import datetime
 from jinja2 import Template
 
-import swarmfetch  
 
+
+
+import swarmfetch  
+import elastic
+import scheduler
 
 logger = logging.getLogger('swarmfetch')
 
@@ -19,11 +24,30 @@ logger = logging.getLogger('swarmfetch')
 
 
 def get_update_time():
-    now = datetime.today()
-    return now.strftime("%Y-%m-%d @ %H:%M:%S")
+    return datetime.today()
 
 
-def run(swarm_addr, html, refresh_time=1):
+        
+    
+
+
+def run(swarm_addr, html, elastic_host, refresh_time=1):
+
+    REFRESH_IMAGE = 30
+    REFRESH_CONTAINER = 5
+    
+    
+    sc = scheduler.Scheduler()
+    sc.add("image", REFRESH_IMAGE)
+    sc.add("container", REFRESH_CONTAINER)
+    
+    ei = elastic.ElasticImages(elastic_host)
+    ei.ping()
+    ei.manage_index()
+
+    ec = elastic.ElasticContainer(elastic_host)
+    ec.ping()
+    ec.manage_index()
 
     sm = swarmfetch.SwarmMetrics(swarm_addr)
     while True:
@@ -41,11 +65,22 @@ def run(swarm_addr, html, refresh_time=1):
             tmpl = Template(fd.read())
     
         tmpl.globals['human_size'] = swarmfetch.human_size
+
+        now = get_update_time()
+        now_formated = now.strftime("%Y-%m-%d @ %H:%M:%S")
+
+        if sc.is_time("image"):
+            ei.add_from_swarm(swarm, now)
+            sc.update_time("image")
+
+        if sc.is_time("container"):
+            ec.add_from_swarm(swarm, now)
+            sc.update_time("container")
+
         
-        
-        update_time = get_update_time()
-        res = tmpl.render(swarm_addr=swarm_addr, swarm_infos={}, swarm=swarm, update_time=update_time)
-        logger.debug("Update time {}".format(update_time))
+        res = tmpl.render(swarm_addr=swarm_addr, swarm_infos={}, swarm=swarm, update_time=now_formated)
+        logger.debug("Update time {}".format(now_formated))
+
         
         pathfile = os.path.join(html, "index.html")
         logger.debug("Write html {}".format(pathfile))
@@ -71,15 +106,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('swarm_addr')
     parser.add_argument('html')
+    parser.add_argument('elastic_host')
     args = parser.parse_args()
-    print(args.swarm_addr)
-    print(args.html)
-        
-        
+    
+    logger.info(args.swarm_addr)
+    logger.info(args.html)
+    logger.info(args.elastic_host)
+    
+    elastic_host = json.loads(args.elastic_host)
       
     while True:
         try:
-            run(args.swarm_addr, args.html)
+            run(args.swarm_addr, args.html, elastic_host)
         except KeyboardInterrupt:
             print("exit")
             sys.exit()

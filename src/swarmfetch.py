@@ -13,20 +13,13 @@ import logging
 
 import eventlet.db_pool as db_pool # avoid catching classes that do not inherit from BaseException is not allowed
 
+from utils import human_size
 
 
 logger = logging.getLogger('swarmfetch')
 
-def human_size(nbytes):
-    import math
-    SUFFIXES = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
-    rank = int((math.log10(nbytes)) / 3)
-    rank = min(rank, len(SUFFIXES) - 1)
-    human = nbytes / (1024.0 ** rank)
-    f = ('%.2f' % human).rstrip('0').rstrip('.')
-    return '%s %s' % (f, SUFFIXES[rank])
-  
-  
+    
+    
 
 class SwarmMetrics(object):
 

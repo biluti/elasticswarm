@@ -8,7 +8,7 @@ import swarmfetch
 
 import pprint
 
-import eventlet.db_pool
+
 
 SWARM_ADDR = 'server:2375'
 
@@ -74,8 +74,6 @@ class TestSwarmMetrics(unittest.TestCase):
         sm = swarmfetch.SwarmMetrics(SWARM_ADDR)
         param = ("test", "172.20.20.20:4243")
         sm.get_metrics_node_green(param)
-        
-
         
 
 

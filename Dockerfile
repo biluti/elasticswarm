@@ -14,9 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  	&& rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --upgrade pip 	
-RUN pip3 install -U docker
-RUN pip3 install -U eventlet
-RUN pip3 install -U Jinja2
+RUN pip3 install -U docker eventlet jinja2 elasticsearch addict
+
 
 ENV NGINX_HTML /usr/share/nginx/html
 ENV APP_DIR /elasticswarm

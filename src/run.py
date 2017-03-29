@@ -13,7 +13,7 @@ from jinja2 import Template
 
 
 
-
+import utils
 import swarmfetch  
 import elastic
 import scheduler
@@ -64,7 +64,10 @@ def run(swarm_addr, html, elastic_host, refresh_time=1):
         with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'template.html'), "r") as fd:
             tmpl = Template(fd.read())
     
-        tmpl.globals['human_size'] = swarmfetch.human_size
+        tmpl.globals['human_size'] = utils.human_size
+        tmpl.globals['human_uptime'] = utils.human_uptime
+        
+        
 
         now = get_update_time()
         now_formated = now.strftime("%Y-%m-%d @ %H:%M:%S")

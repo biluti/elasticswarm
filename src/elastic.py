@@ -382,7 +382,8 @@ class ElasticContainer(ElasticBase):
         body.properties.memory_usage.type   = "long"     
         body.properties.cpu_percent.type    = "float"          
         body.properties.fetch_time.type     = "float"
-        body.properties.short_id_name.type  = "keyword"
+        body.properties.uptime.type         = "float"
+        body.properties.image_short_id.type  = "keyword"
         return body        
 
 
@@ -395,7 +396,7 @@ class ElasticContainer(ElasticBase):
         data = dict(data)      
         _repo, name, tag = docker_image_parser(data["image"])
         data["short_image"] = "{}:{}".format(name, tag)        
-        data["short_id_name"] = "{}/{}".format(data["short_id"], data["short_image"]) 
+        data["image_short_id"] = "{}/{}".format(data["short_image"], data["short_id"]) 
         return super().add_doc(data)  
 
 
@@ -417,6 +418,8 @@ class ElasticContainer(ElasticBase):
                 data["memory_usage"] = container["memory_usage"]
                 data["cpu_percent"] = container["cpu_percent"]
                 data["fetch_time"] = container["fetch_time"]
+                data["uptime"] = container["uptime"]
+                
                 datas.append(data)
         return datas
 

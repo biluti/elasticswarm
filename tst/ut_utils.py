@@ -49,8 +49,6 @@ class SchedulerTest(unittest.TestCase):
 
     def test_1(self):
         
-        
-        
         res = utils.human_size(10)
         self.assertEqual(res, "10 B")
         
@@ -65,6 +63,11 @@ class SchedulerTest(unittest.TestCase):
         
         res = utils.human_size(1025)
         self.assertEqual(res, "1 KB")
+        
+        
+    def test_2(self):        
+        res = utils.human_uptime(10000)
+        self.assertEqual(res, "2 hours ago")
         
 
 if __name__ == "__main__":

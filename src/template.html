@@ -79,6 +79,7 @@
                                     <th>Container</th>
                                     <th>Id</th>
                                     <th>Status</th>
+                                    <th>Uptime</th>
                                     <th>Cpu</th>
                                     <th>Memory</th>
                                     <th>Command</th>
@@ -102,9 +103,17 @@
                                     {% elif container.status == 'restarting' %}
                                         <span class="label label-warning">restarting</span>
                                     {% else %}
-                                        {container.status}}
+                                        {{container.status}}
                                     {% endif %}
                                     </td>
+                                    
+                                    {% if container.uptime is none %}
+                                        <td>-</td>
+                                    {% else %}
+                                        <td>{{ human_uptime(container.uptime) }}</td>
+                                    {% endif %}
+                                                                        
+                                    
                                     {% if container.cpu_percent is none %}
                                         <td>-</td>
                                     {% else %}

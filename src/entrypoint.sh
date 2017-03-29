@@ -2,6 +2,6 @@
 set -e
 
 nginx
-exec ./run.py $1 $NGINX_HTML
+exec ./run.py $1 $NGINX_HTML $3
 
 

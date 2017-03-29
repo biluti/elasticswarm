@@ -75,6 +75,25 @@ class TestSwarmMetrics(unittest.TestCase):
         param = ("test", "172.20.20.20:4243")
         sm.get_metrics_node_green(param)
         
+        
+    def test_3(self):
+               
+        node_systemtime = "2017-03-29T14:22:04.705449558+02:00"
+        started_at      = "2017-03-29T12:05:28.619791993Z"
+        finished_at     = "0001-01-01T00:00:00Z"
+        
+        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at)
+        self.assertEqual(res, 996.085658)        
+        
+    def test_4(self):
+               
+        node_systemtime = "0"
+        started_at      = "2017-03-29T12:05:28.619791993Z"
+        finished_at     = "0001-01-01T00:00:00Z"
+        
+        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at)
+        self.assertEqual(res, None)              
+        
 
 
 

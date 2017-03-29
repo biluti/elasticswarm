@@ -10,6 +10,7 @@ import time
 import docker
 import pprint
 import logging
+import dateutil.parser as parser
 
 import eventlet.db_pool as db_pool # avoid catching classes that do not inherit from BaseException is not allowed
 
@@ -197,6 +198,8 @@ class SwarmMetrics(object):
         info.update(version)
         node["info"] = info
         
+        node_systemtime = node["info"]["SystemTime"]
+        
         for con in node_cli.containers.list(all=True):
             start_con = time.time()
             cid = con.id
@@ -208,6 +211,9 @@ class SwarmMetrics(object):
             containers[cid]["image"]    = con.attrs["Config"]["Image"] 
             containers[cid]["started_at"]  = con.attrs["State"]["StartedAt"]
             containers[cid]["finished_at"]  = con.attrs["State"]["FinishedAt"]
+            
+            containers[cid]["uptime"]  = self.run_time(node_systemtime, containers[cid]["started_at"], containers[cid]["finished_at"])
+            
             logger.debug("Container : {}".format(containers[cid]) )
             stat = self.container_stat(con)
             containers[cid].update(stat)
@@ -215,6 +221,19 @@ class SwarmMetrics(object):
         node["fetch_time"] = time.time() - start_node
         node["containers"] = containers
         return node
+    
+    
+    @staticmethod
+    def run_time(node_systemtime, started_at, finished_at):
+        run_time = None
+        try:
+            node_systemtime = parser.parse(node_systemtime)
+            started_at = parser.parse(started_at)
+            run_time = node_systemtime - started_at 
+            run_time = run_time.total_seconds()
+        except :
+            pass
+        return run_time
         
         
     def container_stat(self, con):

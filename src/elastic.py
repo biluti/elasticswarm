@@ -384,6 +384,9 @@ class ElasticContainer(ElasticBase):
         body.properties.fetch_time.type     = "float"
         body.properties.uptime.type         = "float"
         body.properties.image_short_id.type  = "keyword"
+        
+        body.properties.error.type          = "text"
+        
         return body        
 
 
@@ -400,7 +403,8 @@ class ElasticContainer(ElasticBase):
         return super().add_doc(data)  
 
 
-    def wrapp_swarm(self, swarm, timestamp):
+    @staticmethod
+    def wrapp_swarm(swarm, timestamp):
         datas = []
         for node_name, value in swarm["status_nodes"].items():
             containers = value["containers"]
@@ -408,18 +412,22 @@ class ElasticContainer(ElasticBase):
                 data = {}
                 data["timestamp"] = ElasticBase.format_ela_datetime(timestamp)                
                 data["node_name"] = node_name
-                data["id"] = container_id
-                data["short_id"] = container["short_id"]
-                data["image"] = container["image"]
-                data["name"] = container["name"]
-                data["status"] = container["status"]
-                data["command"] = " ".join(container["command"])
-                data["cpu_percent"] = container["cpu_percent"]
-                data["memory_usage"] = container["memory_usage"]
-                data["cpu_percent"] = container["cpu_percent"]
-                data["fetch_time"] = container["fetch_time"]
-                data["uptime"] = container["uptime"]
                 
+                if "error" in container:
+                    data["error"] = container["error"]
+                else:
+                    data["id"] = container_id
+                    data["short_id"] = container["short_id"]
+                    data["image"] = container["image"]
+                    data["name"] = container["name"]
+                    data["status"] = container["status"]
+                    data["command"] = " ".join(container["command"])
+                    data["cpu_percent"] = container["cpu_percent"]
+                    data["memory_usage"] = container["memory_usage"]
+                    data["cpu_percent"] = container["cpu_percent"]
+                    data["fetch_time"] = container["fetch_time"]
+                    data["uptime"] = container["uptime"]
+                    
                 datas.append(data)
         return datas
 
@@ -458,7 +466,9 @@ class ElasticImages(ElasticBase):
         body.properties.images.properties.image_id_short.type       = "text"
         body.properties.images.properties.label.fields.raw.type     = "keyword"     
         body.properties.images.properties.label.type                = "text"      
-        body.properties.images.properties.size.type                 = "long"             
+        body.properties.images.properties.size.type                 = "long"       
+        body.properties.error.type                                  = "text"
+              
         return body        
 
     @classmethod    
@@ -474,26 +484,32 @@ class ElasticImages(ElasticBase):
         datas = self.wrapp_swarm(swarm, timestamp)
         for data in datas:
             self.add_doc(data)
-        
-    def wrapp_swarm(self, swarm, timestamp):
+    
+    @staticmethod
+    def wrapp_swarm(swarm, timestamp):
         datas = []
         for node_name, value in swarm["images_nodes"].items():
             images = value["images"]
             data = {}
+            
             data["timestamp"] = ElasticBase.format_ela_datetime(timestamp)
             data["node_name"] = node_name
-            data["images_size"] = value["total_size"]
-            data["images_count"] = value["count"]
-            di = []
-            for image_id, image in images.items():
-                dd = {}
-                dd["image_id"] = image_id
-                dd["image_id_short"] = image["short_id"]
-                dd["label"] = image["RepoTags"][0]
-                dd["size"] = image["Size"]
-                di.append(dd)
-            data["images"] = di
-            datas.append(data)
+            
+            if "error" in value:
+                data["error"] = value["error"]
+            else:
+                data["images_size"] = value["total_size"]
+                data["images_count"] = value["count"]
+                di = []
+                for image_id, image in images.items():
+                    dd = {}
+                    dd["image_id"] = image_id
+                    dd["image_id_short"] = image["short_id"]
+                    dd["label"] = image["RepoTags"][0]
+                    dd["size"] = image["Size"]
+                    di.append(dd)
+                data["images"] = di
+                datas.append(data)
         return datas
 
 

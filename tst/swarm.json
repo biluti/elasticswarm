@@ -1,0 +1,230 @@
+{
+    "swarm_addr": "swarm:23000",
+    "swarm_version": {
+        "Arch": "amd64",
+        "GoVersion": "go1.5.3",
+        "Version": "swarm/1.1.3",
+        "ApiVersion": "1.22",
+        "BuildTime": "Wed Mar  2 00:15:12 UTC 2016",
+        "GitCommit": "7e9c6bd",
+        "Os": "linux",
+        "KernelVersion": "3.16.0-0.bpo.4-amd64"
+    },
+    "status_nodes": {
+        "X2": {
+            "error": "HTTPConnectionPool(host='172.20.204.37', port=4243): Max retries exceeded with url: /v1.26/_ping (Caused by ConnectTimeoutError(<requests.packages.urllib3.connection.HTTPConnection object at 0x7f54d9d8c128>, 'Connection to 172.20.200.10 timed out. (connect timeout=2)'))",
+            "ReservedMemory": "0 B / 16.4 GiB",
+            "url": "172.20.200.10:4243",
+            "containers": {},
+            "Containers": "3",
+            "Error": "(none)",
+            "Status": "Healthy",
+            "ReservedCPUs": "0 / 8",
+            "UpdatedAt": "2017-04-05T09:01:39Z",
+            "Labels": "executiondriver=<not supported>, kernelversion=3.19.0-58-generic, operatingsystem=Ubuntu 14.04.4 LTS, storagedriver=overlay"
+        },
+        "X1": {
+            "ReservedMemory": "0 B / 16.34 GiB",
+            "url": "172.20.200.10:4243",
+            "info": {
+                "IPv4Forwarding": true,
+                "CPUSet": true,
+                "ServerVersion": "1.13.1",
+                "GoVersion": "go1.7.5",
+                "InitBinary": "docker-init",
+                "BuildTime": "2017-02-08T06:42:29.583885417+00:00",
+                "CPUShares": true,
+                "NoProxy": "",
+                "Labels": null,
+                "ContainerdCommit": {
+                    "ID": "aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1",
+                    "Expected": "aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1"
+                },
+                "BridgeNfIptables": true,
+                "LoggingDriver": "json-file",
+                "Version": "1.13.1",
+                "ContainersPaused": 0,
+                "MemoryLimit": true,
+                "ExperimentalBuild": false,
+                "RuncCommit": {
+                    "ID": "9df8b306d01f59d3a8029be411de015b7304dd8f",
+                    "Expected": "9df8b306d01f59d3a8029be411de015b7304dd8f"
+                },
+                "ClusterStore": "",
+                "OomKillDisable": true,
+                "MinAPIVersion": "1.12",
+                "SystemStatus": null,
+                "MemTotal": 16710795264,
+                "NEventsListener": 1,
+                "KernelMemory": true,
+                "Name": "Z440",
+                "HttpsProxy": "",
+                "DefaultRuntime": "runc",
+                "DockerRootDir": "/var/lib/docker",
+                "NCPU": 16,
+                "Os": "linux",
+                "SwapLimit": false,
+                "Architecture": "x86_64",
+                "SecurityOptions": [
+                    "name=apparmor"
+                ],
+                "Debug": true,
+                "ApiVersion": "1.26",
+                "KernelVersion": "4.2.8-040208-generic",
+                "OperatingSystem": "Ubuntu 14.04.4 LTS",
+                "ContainersStopped": 0,
+                "OSType": "linux",
+                "CpuCfsQuota": true,
+                "LiveRestoreEnabled": false,
+                "Images": 27,
+                "NGoroutines": 36,
+                "Driver": "overlay",
+                "NFd": 30,
+                "ID": "EYXB:EE5O:NOPM:WGKC:YDPV:VVUL:PR2P:W3NO:TSJJ:TWGM:OQF3:LJB7",
+                "SystemTime": "2017-04-05T11:01:48.727306942+02:00",
+                "ContainersRunning": 2,
+                "Arch": "amd64",
+                "Containers": 2,
+                "InitCommit": {
+                    "ID": "949e6fa",
+                    "Expected": "949e6fa"
+                },
+                "ClusterAdvertise": "",
+                "HttpProxy": "",
+                "CgroupDriver": "cgroupfs",
+                "IndexServerAddress": "https://index.docker.io/v1/",
+                "Plugins": {
+                    "Authorization": null,
+                    "Network": [
+                        "bridge",
+                        "host",
+                        "macvlan",
+                        "null",
+                        "overlay"
+                    ],
+                    "Volume": [
+                        "local"
+                    ]
+                },
+                "Isolation": "",
+                "DriverStatus": [
+                    [
+                        "Backing Filesystem",
+                        "extfs"
+                    ],
+                    [
+                        "Supports d_type",
+                        "true"
+                    ]
+                ],
+                "Runtimes": {
+                    "runc": {
+                        "path": "docker-runc"
+                    }
+                },
+                "BridgeNfIp6tables": true,
+                "CpuCfsPeriod": true,
+                "GitCommit": "092cba3",
+                "RegistryConfig": {
+                    "Mirrors": [],
+                    "IndexConfigs": {
+                        "docker.io": {
+                            "Mirrors": null,
+                            "Name": "docker.io",
+                            "Official": true,
+                            "Secure": true
+                        }
+                    },
+                    "InsecureRegistryCIDRs": [
+                        "127.0.0.0/8"
+                    ]
+                }
+            },
+            "containers": {
+                "4f8870e45cb67e31f5f2b72a985bd552a8cc7cd56a65321d89c854ec4d7ab363": {
+                    "name": "cocky_jones",
+                    "uptime": 341.536975,
+                    "memory_usage": 704512,
+                    "finished_at": "0001-01-01T00:00:00Z",
+                    "image": "ubuntu",
+                    "started_at": "2017-04-05T08:56:07.190331808Z",
+                    "status": "running",
+                    "fetch_time": 1.9999144077301025,
+                    "cpu_percent": 0,
+                    "short_id": "4f8870e45c",
+                    "command": [
+                        "bash",
+                        "-c",
+                        "/usr/sbin/sshd -D -p 22"
+                    ]
+                },
+                "b3eee8cdf165605285e1b4df2c0f82169fb19bd50bbe12206ca2b248cb63ca65": {
+                    "name": "hardcore_feynman",
+                    "uptime": 341.313502,
+                    "memory_usage": 182902784,
+                    "finished_at": "0001-01-01T00:00:00Z",
+                    "image": "ubuntu",
+                    "started_at": "2017-04-05T08:56:07.413804438Z",
+                    "status": "running",
+                    "fetch_time": 1.462780475616455,
+                    "cpu_percent": 0.13004029456718078,
+                    "short_id": "b3eee8cdf1",
+                    "command": [
+                        "bash",
+                        "-c",
+                        "/usr/sbin/sshd -D -p 22"
+                    ]
+                }
+            },
+            "Containers": "2",
+            "Error": "(none)",
+            "Status": "Healthy",
+            "fetch_time": 3.5307650566101074,
+            "ReservedCPUs": "0 / 16",
+            "UpdatedAt": "2017-04-05T09:01:33Z",
+            "Labels": "executiondriver=<not supported>, kernelversion=4.2.8-040208-generic, operatingsystem=Ubuntu 14.04.4 LTS, storagedriver=overlay"
+        }
+    },
+    "status_swarm": {
+        "Role": "primary",
+        "Strategy": "spread",
+        "MemTotal": 65915974655,
+        "ContainersStopped": 0,
+        "Containers": 10,
+        "Images": 75,
+        "Filters": "health, port, dependency, affinity, constraint",
+        "ContainersRunning": 10,
+        "ContainersPaused": 0,
+        "NCPU": 48,
+        "nodes": 4
+    },
+    "images_nodes": {
+        "X2": {
+            "error": "HTTPConnectionPool(host='172.20.200.10', port=4243): Max retries exceeded with url: /v1.26/images/json?all=0&only_ids=0 (Caused by ConnectTimeoutError(<requests.packages.urllib3.connection.HTTPConnection object at 0x7f54d9e12a90>, 'Connection to 172.20.200.10 timed out. (connect timeout=2)'))",
+            "images": {}
+        },
+        "X1": {
+            "count": 2,
+            "total_size": 1061644,
+            "images": {
+                "sha256:ac3836651d63555e02d51ff426ec4d14d6d2593b8f47843e9c549767690335e2": {
+                    "RepoTags": [
+                        "ubuntu:v4"
+                    ],
+                    "short_id": "sha256:ac3836651d",
+                    "Size": 559833833,
+                    "Labels": {}
+                },
+                "sha256:671d79a868428fafdc58e81376c6ce3ffdf092dcdf5b5865efc9b67811a6d2ad": {
+                    "RepoTags": [
+                        "ubuntu:v1"
+                    ],
+                    "short_id": "sha256:671d79a868",
+                    "Size": 541343580,
+                    "Labels": {}
+                }
+        }
+        }
+    },
+    "update_time": "2017-04-05 @ 09:01:53"
+}

@@ -121,13 +121,25 @@ if __name__ == '__main__':
     logger.info(args.elastic_host)
     
     elastic_host = json.loads(args.elastic_host)
-      
+    
+    
+    with open(os.path.join(args.html, "error.txt"), 'w') as fd:
+        fd.write("Start : {} \n".format(get_update_time().strftime("%Y-%m-%d @ %H:%M:%S")))
+        
     while True:
         try:
             run(args.swarm_addr, args.html, elastic_host)
         except KeyboardInterrupt:
             print("exit")
             sys.exit()
+        except Exception as ex:
+            des = utils.inspect_traceback(ex)
+            res = utils.trace_traceback(des)
+            with open(os.path.join(args.html, "error.txt"), 'a') as fd:
+                fd.write(get_update_time().strftime("%Y-%m-%d @ %H:%M:%S")+"\n")
+                fd.write(res)
+            print(res)
+            
          
     
     

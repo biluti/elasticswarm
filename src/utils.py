@@ -3,8 +3,11 @@
 
 
 import math
+import inspect
 import datetime
 import humanize
+
+
 
 def human_size(nbytes):
     SUFFIXES = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
@@ -17,8 +20,6 @@ def human_size(nbytes):
 
 def human_uptime(sec):
     return humanize.naturaltime(datetime.timedelta(seconds=sec))
-
-
 
 
 def docker_image_parser(image_name):
@@ -40,6 +41,36 @@ def docker_image_parser(image_name):
         pass        
     return repo, name, tag
 
+
+def inspect_traceback(exception):
+    CALL_DEPTH = 1
+    DEFAULT = dict.fromkeys(["path", "line", "function", "code"], "no info")
+    traceback = inspect.trace()
+    stack = []
+    try :
+        for index in range(CALL_DEPTH, len(traceback)):
+            stack.append(dict(DEFAULT))
+            stack[-1]["path"]      = traceback[index][1]
+            stack[-1]["line"]      = traceback[index][2]
+            stack[-1]["function"]  = traceback[index][3]
+            stack[-1]["code"]      = str(traceback[index][4][0]).strip("\n\r")
+    except Exception:
+        pass
+    des = {}
+    des["stack"]            = stack
+    des["exception_info"]   = str(exception)
+    des["exception_class"]  = exception.__class__.__name__
+    return des
+
+
+def trace_traceback(des):
+    dis = "Exception \n"
+    for sline in des["stack"] :
+        dis += "    File \"%s\", line %d, in %s\n" % (sline["path"], sline["line"], sline["function"])
+        dis += "        %s\n" % (sline["code"])
+    dis += "    %s\n" % (des["exception_class"])
+    dis += "    %s\n" % (des["exception_info"])
+    return dis
 
 
 

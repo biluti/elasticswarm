@@ -4,20 +4,25 @@
 
 import unittest
 
+ 
 import json
+import os.path
 from datetime import datetime
 
 
 import elastic
 
 
-TMP_JSON = "swarm.json"
+
+
+JSON = os.path.join(os.path.dirname(__file__), "swarm.json")
+
 
          
 class SchedulerTest(unittest.TestCase):
      
     def setUp(self):
-        with open(TMP_JSON, "r") as fd:
+        with open(JSON, "r") as fd:
             self.swarm = json.load(fd)
 
 

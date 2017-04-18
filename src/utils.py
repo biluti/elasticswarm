@@ -19,7 +19,10 @@ def human_size(nbytes):
   
 
 def human_uptime(sec):
-    return humanize.naturaltime(datetime.timedelta(seconds=sec))
+    try:
+        return humanize.naturaltime(datetime.timedelta(seconds=sec))
+    except OverflowError as ex:
+        return "Error {} sec".format(sec)
 
 
 def docker_image_parser(image_name):

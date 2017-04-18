@@ -81,8 +81,9 @@ class TestSwarmMetrics(unittest.TestCase):
         node_systemtime = "2017-03-29T14:22:04.705449558+02:00"
         started_at      = "2017-03-29T12:05:28.619791993Z"
         finished_at     = "0001-01-01T00:00:00Z"
+        status          = "running"
         
-        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at)
+        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at, status)
         self.assertEqual(res, 996.085658)        
         
     def test_4(self):
@@ -90,13 +91,33 @@ class TestSwarmMetrics(unittest.TestCase):
         node_systemtime = "0"
         started_at      = "2017-03-29T12:05:28.619791993Z"
         finished_at     = "0001-01-01T00:00:00Z"
+        status          = "running"
         
-        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at)
+        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at, status)
         self.assertEqual(res, None)              
         
 
+    def test_5(self):
+               
+        node_systemtime = "0"
+        started_at      = "0001-01-01T00:00:00Z"
+        finished_at     = "0001-01-01T00:00:00Z"
+        status          = "created"
+        
+        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at, status)
+        self.assertEqual(res, None)   
 
 
+    def test_6(self):
+               
+        node_systemtime = "2017-04-18T13:59:29.092462102+02:00"
+        started_at      = "0001-01-01T00:00:00Z"
+        finished_at     = "0001-01-01T00:00:00Z"
+        status          = "running"
+        
+        res = swarmfetch.SwarmMetrics.run_time(node_systemtime, started_at, finished_at, status)
+        self.assertEqual(res, None)   
+        
 
 if __name__ == "__main__":
     unittest.main()

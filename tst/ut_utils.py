@@ -68,7 +68,15 @@ class SchedulerTest(unittest.TestCase):
     def test_2(self):        
         res = utils.human_uptime(10000)
         self.assertEqual(res, "2 hours ago")
+
+
+    def test_3(self):        
+        res = utils.human_uptime(555555555555555555)
+        self.assertEqual(res, "Error 555555555555555555 sec")
+
         
+        
+                
 
 if __name__ == "__main__":
     unittest.main()

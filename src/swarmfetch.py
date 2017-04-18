@@ -212,7 +212,8 @@ class SwarmMetrics(object):
             containers[cid]["started_at"]  = con.attrs["State"]["StartedAt"]
             containers[cid]["finished_at"]  = con.attrs["State"]["FinishedAt"]
             
-            containers[cid]["uptime"]  = self.run_time(node_systemtime, containers[cid]["started_at"], containers[cid]["finished_at"])
+            containers[cid]["uptime"]  = self.run_time(node_systemtime, containers[cid]["started_at"],\
+                                                       containers[cid]["finished_at"],containers[cid]["status"])
             
             logger.debug("Container : {}".format(containers[cid]) )
             stat = self.container_stat(con)
@@ -224,8 +225,18 @@ class SwarmMetrics(object):
     
     
     @staticmethod
-    def run_time(node_systemtime, started_at, finished_at):
+    def run_time(node_systemtime, started_at, finished_at, status):
         run_time = None
+        started_at
+        
+        if status in ["created"]:
+            return run_time
+        if started_at in ["0001-01-01T00:00:00Z"]:
+            return run_time
+            
+        
+        
+
         try:
             node_systemtime = parser.parse(node_systemtime)
             started_at = parser.parse(started_at)
